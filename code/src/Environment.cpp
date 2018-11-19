@@ -15,12 +15,35 @@ namespace MultiRobot {
     m_drawing= cv::Vec3b(227, 246, 253);
     cv::namedWindow("Environment");
     cv::moveWindow("Environment", 40, 40);
+
+
+    m_colors.white = {255,255,255};
+    m_colors.green = {0,255,20};
+    m_colors.dark_red = {20,0,255};
+    m_colors.milk= {227,246,253};
+    m_colors.lightBlue= {210,139,38};
+    m_colors.fadedLightBlue= {255,207,130};
+    m_colors.lightOrange = {0,164,216};
+    m_colors.darkBrown = {1,83,109};
+ 
   }
 
   void drawEventDistribs(){
     //TODO implement
   };
- 
+
+  void Environment::drawCam(
+      const std::vector< cv::Point2d> &t_points,
+      const Eigen::Vector2d &t_camCenter){
+
+    m_drawer.drawHollowPoligon(m_drawing, t_points, m_colors.dark_red );
+    cv::Point2d pointCamCenter( t_camCenter(0), t_camCenter(1));
+    m_drawer.drawLine(m_drawing, pointCamCenter,
+        t_points.at(0), m_colors.dark_red );
+    m_drawer.drawLine(m_drawing, pointCamCenter,
+        t_points.at(5), m_colors.dark_red );
+  };
+
 
   void Environment::showImg(){
     cv::imshow("Environment",m_drawing);

@@ -12,14 +12,17 @@ namespace MultiRobot{
 
 
   TEST( OneCamTest, simple){
-    Drawer drawer( 40);
+    Drawer drawer( 10);
 
     std::vector<Eigen::Vector2d> eventDistribs; 
     eventDistribs.push_back( Eigen::Vector2d(3,3));
     
     Environment env( drawer, eventDistribs);
 
-    Camera cam( env);
+    Eigen::Vector2d p( 5, 5);
+    Eigen::Vector2d v( 0.7, 0.7);
+
+    Camera cam( env, p, v);
 
     std::vector<Camera> cams; 
     cams.push_back(cam);

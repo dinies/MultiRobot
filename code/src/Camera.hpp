@@ -3,6 +3,7 @@
 #pragma once
 #include <unistd.h>
 #include "Environment.hpp"
+#include "utils/MyMath.hpp"
 
 namespace MultiRobot {
   class Camera {
@@ -12,6 +13,7 @@ namespace MultiRobot {
     Eigen::Vector2d m_p;//position
     Eigen::Vector2d m_v;//optical axis direction
     double m_alpha; //angle of view (zoom level)
+    double m_radius;
     public:
 
     Camera(Environment & t_env,
@@ -22,6 +24,10 @@ namespace MultiRobot {
     Eigen::Vector2d generateInput();
 
     void updateState(const Eigen::Vector2d & t_deltaState );
+
+    void evolve();
+
+    std::vector< cv::Point2d> computePointsCameraDrawing();
 
     void draw();
 

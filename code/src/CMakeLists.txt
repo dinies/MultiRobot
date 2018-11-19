@@ -3,6 +3,7 @@ add_library( mainSources
   Camera.cpp
   Environment.cpp
   utils/Drawer.cpp
+  utils/MyMath.cpp
   )
 
 target_include_directories(
