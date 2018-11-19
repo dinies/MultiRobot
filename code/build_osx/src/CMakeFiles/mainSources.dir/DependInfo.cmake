@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/dinies33/GitRepos/MultiRobot/code/src/Camera.cpp" "/Users/dinies33/GitRepos/MultiRobot/code/build_osx/src/CMakeFiles/mainSources.dir/Camera.cpp.o"
   "/Users/dinies33/GitRepos/MultiRobot/code/src/Environment.cpp" "/Users/dinies33/GitRepos/MultiRobot/code/build_osx/src/CMakeFiles/mainSources.dir/Environment.cpp.o"
   "/Users/dinies33/GitRepos/MultiRobot/code/src/utils/Drawer.cpp" "/Users/dinies33/GitRepos/MultiRobot/code/build_osx/src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o"
+  "/Users/dinies33/GitRepos/MultiRobot/code/src/utils/MyMath.cpp" "/Users/dinies33/GitRepos/MultiRobot/code/build_osx/src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/mainSources.dir/Camera.cpp.o"
   "CMakeFiles/mainSources.dir/Environment.cpp.o"
   "CMakeFiles/mainSources.dir/utils/Drawer.cpp.o"
+  "CMakeFiles/mainSources.dir/utils/MyMath.cpp.o"
   "../../bin/libmainSources.pdb"
   "../../bin/libmainSources.a"
 )

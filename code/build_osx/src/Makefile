@@ -290,6 +290,33 @@ utils/Drawer.cpp.s:
 	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx && $(MAKE) -f src/CMakeFiles/mainSources.dir/build.make src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.s
 .PHONY : utils/Drawer.cpp.s
 
+utils/MyMath.o: utils/MyMath.cpp.o
+
+.PHONY : utils/MyMath.o
+
+# target to build an object file
+utils/MyMath.cpp.o:
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx && $(MAKE) -f src/CMakeFiles/mainSources.dir/build.make src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o
+.PHONY : utils/MyMath.cpp.o
+
+utils/MyMath.i: utils/MyMath.cpp.i
+
+.PHONY : utils/MyMath.i
+
+# target to preprocess a source file
+utils/MyMath.cpp.i:
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx && $(MAKE) -f src/CMakeFiles/mainSources.dir/build.make src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.i
+.PHONY : utils/MyMath.cpp.i
+
+utils/MyMath.s: utils/MyMath.cpp.s
+
+.PHONY : utils/MyMath.s
+
+# target to generate assembly for a file
+utils/MyMath.cpp.s:
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx && $(MAKE) -f src/CMakeFiles/mainSources.dir/build.make src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.s
+.PHONY : utils/MyMath.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -316,6 +343,9 @@ help:
 	@echo "... utils/Drawer.o"
 	@echo "... utils/Drawer.i"
 	@echo "... utils/Drawer.s"
+	@echo "... utils/MyMath.o"
+	@echo "... utils/MyMath.i"
+	@echo "... utils/MyMath.s"
 .PHONY : help
 
 

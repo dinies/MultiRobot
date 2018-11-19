@@ -153,12 +153,37 @@ src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o.provides: src/CMakeFiles/mainS
 src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o.provides.build: src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o
 
 
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o: src/CMakeFiles/mainSources.dir/flags.make
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o: ../src/utils/MyMath.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/dinies33/GitRepos/MultiRobot/code/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o"
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/mainSources.dir/utils/MyMath.cpp.o -c /Users/dinies33/GitRepos/MultiRobot/code/src/utils/MyMath.cpp
+
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/mainSources.dir/utils/MyMath.cpp.i"
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/dinies33/GitRepos/MultiRobot/code/src/utils/MyMath.cpp > CMakeFiles/mainSources.dir/utils/MyMath.cpp.i
+
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/mainSources.dir/utils/MyMath.cpp.s"
+	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx/src && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/dinies33/GitRepos/MultiRobot/code/src/utils/MyMath.cpp -o CMakeFiles/mainSources.dir/utils/MyMath.cpp.s
+
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.requires:
+
+.PHONY : src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.requires
+
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.provides: src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.requires
+	$(MAKE) -f src/CMakeFiles/mainSources.dir/build.make src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.provides.build
+.PHONY : src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.provides
+
+src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.provides.build: src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o
+
+
 # Object files for target mainSources
 mainSources_OBJECTS = \
 "CMakeFiles/mainSources.dir/AgentManager.cpp.o" \
 "CMakeFiles/mainSources.dir/Camera.cpp.o" \
 "CMakeFiles/mainSources.dir/Environment.cpp.o" \
-"CMakeFiles/mainSources.dir/utils/Drawer.cpp.o"
+"CMakeFiles/mainSources.dir/utils/Drawer.cpp.o" \
+"CMakeFiles/mainSources.dir/utils/MyMath.cpp.o"
 
 # External object files for target mainSources
 mainSources_EXTERNAL_OBJECTS =
@@ -167,9 +192,10 @@ mainSources_EXTERNAL_OBJECTS =
 ../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/Camera.cpp.o
 ../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/Environment.cpp.o
 ../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o
+../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o
 ../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/build.make
 ../bin/libmainSources.a: src/CMakeFiles/mainSources.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/dinies33/GitRepos/MultiRobot/code/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library ../../bin/libmainSources.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/dinies33/GitRepos/MultiRobot/code/build_osx/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX static library ../../bin/libmainSources.a"
 	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx/src && $(CMAKE_COMMAND) -P CMakeFiles/mainSources.dir/cmake_clean_target.cmake
 	cd /Users/dinies33/GitRepos/MultiRobot/code/build_osx/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mainSources.dir/link.txt --verbose=$(VERBOSE)
 
@@ -182,6 +208,7 @@ src/CMakeFiles/mainSources.dir/requires: src/CMakeFiles/mainSources.dir/AgentMan
 src/CMakeFiles/mainSources.dir/requires: src/CMakeFiles/mainSources.dir/Camera.cpp.o.requires
 src/CMakeFiles/mainSources.dir/requires: src/CMakeFiles/mainSources.dir/Environment.cpp.o.requires
 src/CMakeFiles/mainSources.dir/requires: src/CMakeFiles/mainSources.dir/utils/Drawer.cpp.o.requires
+src/CMakeFiles/mainSources.dir/requires: src/CMakeFiles/mainSources.dir/utils/MyMath.cpp.o.requires
 
 .PHONY : src/CMakeFiles/mainSources.dir/requires
 
