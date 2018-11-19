@@ -32,8 +32,8 @@
 *.app
 
 
-build
-bin/
+code/build
+code/bin/
 code/compile_commands.json
 
 
