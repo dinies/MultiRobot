@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../../bin/libmainSources.a  CMakeFiles/mainSources.dir/AgentManager.cpp.o CMakeFiles/mainSources.dir/Camera.cpp.o CMakeFiles/mainSources.dir/Environment.cpp.o CMakeFiles/mainSources.dir/utils/Drawer.cpp.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib ../../bin/libmainSources.a
