@@ -37,7 +37,11 @@ namespace MultiRobot {
 
     void drawEventDistribs();
 
-    void drawCam(const std::vector< cv::Point2d> &t_points, const Eigen::Vector2d &t_camCenter);
+    void drawCam(
+        const std::vector< cv::Point2d> &t_points,
+        const Eigen::Vector2d &t_camCenter,
+        const bool t_deletingFlag);
+
     void showImg();
 
   };

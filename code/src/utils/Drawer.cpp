@@ -26,19 +26,32 @@ namespace MultiRobot{
     }
   };
 
+  void Drawer::drawSegmentSeries(
+      const RGBImage &t_drawing,
+      const std::vector< cv::Point2d> &t_consecPoints,
+      const cv::Scalar &t_color){
+
+    for (int i = 1; i < t_consecPoints.size() ; ++i) {
+      drawLine( t_drawing,
+          t_consecPoints.at(i-1),
+          t_consecPoints.at(i),t_color);
+    }
+  };
+
+
   void Drawer::drawPatch
     (RGBImage &t_drawing,
      const cv::Point2d &t_point,
      const cv::Scalar &t_color){
 
-    cv::Point2d P_imgFrame =
-      convertFrowWorldToImg(t_drawing, t_point);
+      cv::Point2d P_imgFrame =
+        convertFromWorldToImg(t_drawing, t_point);
 
-    if ( isInsideBoundaries(t_drawing, P_imgFrame )){
-    t_drawing.at<cv::Vec3b>(P_imgFrame.y,P_imgFrame.x) =
-      cv::Vec3b(t_color[0],t_color[1],t_color[2]);
-    }
- };
+      if ( isInsideBoundaries(t_drawing, P_imgFrame )){
+        t_drawing.at<cv::Vec3b>(P_imgFrame.y,P_imgFrame.x) =
+          cv::Vec3b(t_color[0],t_color[1],t_color[2]);
+      }
+    };
 
   void Drawer::drawLine(
       const RGBImage &t_drawing,
@@ -47,18 +60,137 @@ namespace MultiRobot{
       const cv::Scalar &t_color){
 
     cv::Point2d firstP_imgFrame =
-      convertFrowWorldToImg(t_drawing, t_firstP);
+      convertFromWorldToImg(t_drawing, t_firstP);
     cv::Point2d secondP_imgFrame =
-      convertFrowWorldToImg(t_drawing, t_secondP);
+      convertFromWorldToImg(t_drawing, t_secondP);
     if ( isInsideBoundaries(t_drawing, firstP_imgFrame) &&
         isInsideBoundaries(t_drawing, secondP_imgFrame)){
       cv::line(t_drawing, firstP_imgFrame,
           secondP_imgFrame,t_color,2);
+    }else{
+
+      if ( isInsideBoundaries(t_drawing, firstP_imgFrame)){
+
+        cv::Point2d secondP_worldFrameInside =
+          bringPointInsideBoundaries(t_drawing,
+              t_firstP, t_secondP);
+
+        cv::Point2d secondP_imgFrameInside =
+          convertFromWorldToImg( t_drawing,
+              secondP_worldFrameInside);
+
+        cv::line(t_drawing, firstP_imgFrame,
+            secondP_imgFrameInside,t_color,2);
+
+      }else{
+        cv::Point2d firstP_worldFrameInside =
+          bringPointInsideBoundaries(t_drawing,
+              t_secondP, t_firstP);
+
+        cv::Point2d firstP_imgFrameInside =
+          convertFromWorldToImg( t_drawing,
+              firstP_worldFrameInside);
+
+        cv::line(t_drawing, firstP_imgFrameInside,
+            secondP_imgFrame,t_color,2);
+      }
     }
-  };
+  }
+
+  cv::Point2d Drawer::bringPointInsideBoundaries(
+      const RGBImage &t_drawing,
+      const cv::Point2d &t_insidePoint,
+      const cv::Point2d &t_outsidePoint){
+
+    double heigth = t_drawing.rows/m_scale;
+    double width = t_drawing.cols/m_scale;
+
+    cv::Point2d cornerDL( 0, 0); 
+    cv::Point2d cornerUL( 0, heigth); 
+    cv::Point2d cornerDR( width, 0); 
+    cv::Point2d cornerUR( width, heigth); 
+
+    //TODO solve the reference problem since the point won't be modified returning from the function
+    //all the calculation for the intersection points have to be made in the world coords not in the image coords.
+    cv::Point2d interPoint;
+
+    if ( findIntersectionBetweenSegments(
+          t_insidePoint, t_outsidePoint,
+          cornerDL, cornerDR,
+          interPoint)){
+      return interPoint;
+    }
+
+    if ( findIntersectionBetweenSegments(
+          t_insidePoint, t_outsidePoint,
+          cornerUR, cornerDR,
+          interPoint)){
+      return interPoint;
+    }
+
+    if ( findIntersectionBetweenSegments(
+          t_insidePoint, t_outsidePoint,
+          cornerUL, cornerUR,
+          interPoint)){
+      return interPoint;
+    }
+
+    if ( findIntersectionBetweenSegments(
+          t_insidePoint, t_outsidePoint,
+          cornerUL, cornerDL,
+          interPoint)){
+      return interPoint;
+    }
+    return interPoint;
+  }
+
+  double Drawer::crossProd2D(
+      const Eigen::Vector2d &v1,
+      const Eigen::Vector2d &v2){
+
+    return v1(0) * v2(1) - v1(1) * v2(0);
+  }
+
+  bool Drawer::findIntersectionBetweenSegments(
+      const cv::Point2d &p1,
+      const cv::Point2d &p2,
+      const cv::Point2d &q1,
+      const cv::Point2d &q2,
+      cv::Point2d &result){
+
+    Eigen::Vector2d p_1( p1.x, p1.y);
+    Eigen::Vector2d p_2( p2.x, p2.y);
+    Eigen::Vector2d q_1( q1.x, q1.y);
+    Eigen::Vector2d q_2( q2.x, q2.y);
+
+    Eigen::Vector2d r = p_2 -p_1;
+    Eigen::Vector2d s = q_2 -q_1;
+
+    double uNum = crossProd2D(q_1- p_1, r);
+    double denom = crossProd2D( r, s);
+
+    if (denom != 0) {
+
+      double u= uNum/ denom;
+      double t= crossProd2D(q_1 - p_1,s)/denom;
+      if ( t>=0 && t<=1 && u>=0 && u<=1){
+
+        Eigen::Vector2d crossPoint = p_1 + t*r;
+        result.x = crossPoint(0);
+        result.y = crossPoint(1);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
 
 
-  cv::Point2d Drawer::convertFrowWorldToImg(
+
+  cv::Point2d Drawer::convertFromWorldToImg(
       const RGBImage &t_drawing,
       const cv::Point2d &t_point){
 

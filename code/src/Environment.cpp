@@ -34,20 +34,23 @@ namespace MultiRobot {
 
   void Environment::drawCam(
       const std::vector< cv::Point2d> &t_points,
-      const Eigen::Vector2d &t_camCenter){
+      const Eigen::Vector2d &t_camCenter,
+      const bool t_deletingFlag){
 
-    m_drawer.drawHollowPoligon(m_drawing, t_points, m_colors.dark_red );
-    cv::Point2d pointCamCenter( t_camCenter(0), t_camCenter(1));
-    m_drawer.drawLine(m_drawing, pointCamCenter,
-        t_points.at(0), m_colors.dark_red );
-    m_drawer.drawLine(m_drawing, pointCamCenter,
-        t_points.at(5), m_colors.dark_red );
+    cv::Scalar color;
+    if (t_deletingFlag){
+      color= m_colors.milk;
+    }else{
+      color= m_colors.dark_red;
+    }
+
+    m_drawer.drawSegmentSeries(m_drawing, t_points, color);
   };
 
 
   void Environment::showImg(){
     cv::imshow("Environment",m_drawing);
-    cv::waitKey(1);
+    cv::waitKey(50);
    };
 
 }

@@ -14,6 +14,7 @@ namespace MultiRobot {
     Eigen::Vector2d m_v;//optical axis direction
     double m_alpha; //angle of view (zoom level)
     double m_radius;
+    std::vector< cv::Point2d> m_drawingPoints;
     public:
 
     Camera(Environment & t_env,

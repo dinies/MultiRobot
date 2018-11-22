@@ -10,8 +10,8 @@ namespace MultiRobot {
   void  AgentManager::cycle(){
     for ( int i= 0; i<= 100; ++i){
       std::cout << " cycle step \n";
-      for( int j = 0; j<= m_cameras.size(); ++j){
-        Camera cam = m_cameras.at(j);
+      for( int j = 0; j<= m_cameras.size()-1; ++j){
+        Camera &cam = m_cameras.at(j);
         cam.evolve();
         m_env.showImg();
       }
