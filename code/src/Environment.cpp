@@ -13,7 +13,7 @@ namespace MultiRobot {
     m_y_units( t_y_units),
     m_precisionDiscretization( t_precDiscret)
   {
-    m_drawing.create( 1250,1250 );
+    m_drawing.create( 1000,1000 );
     m_drawing= cv::Vec3b(227, 246, 253);
     cv::namedWindow("Environment");
     cv::moveWindow("Environment", 40, 40);
@@ -32,43 +32,55 @@ namespace MultiRobot {
  
   }
 
-  std::vector< std::vector< double>> Environment::computeEventValues(){
-    std::vector< std::vector< double>> values;    
+  std::vector< std::vector< discretePoint>> Environment::computeEventValues(){
+    std::vector< std::vector< discretePoint>> values;    
     const int numOfColumns = m_x_units*m_precisionDiscretization;
     values.reserve( numOfColumns);
-    const double xIncrement = m_x_units/ m_precisionDiscretization;
-    double currX = 0;
+    const double xIncrement =  1.0/m_precisionDiscretization;
+    double currX = 0.0;
     for (int i = 0; i < numOfColumns ; ++i){
       values.push_back( computeEventColumn(currX ));
       currX += xIncrement;
     }
- 
+    return values;
   };
 
 
-  std::vector< double> Environment::computeEventColumn( const double t_xValue){
-    std::vector< double> values;    
+  std::vector< discretePoint> Environment::computeEventColumn( const double t_xValue){
+    std::vector< discretePoint> values;    
     const int numOfRows = m_y_units*m_precisionDiscretization;
     values.reserve( numOfRows);
-    const double yIncrement = m_y_units/ m_precisionDiscretization;
-    double currY = 0;
+    const double yIncrement = 1.0/m_precisionDiscretization;
+    double currY = 0.0;
     for (int i = 0; i < numOfRows; ++i){
-      Eigen::Vector2d currPoint( t_xValue, currY);
-      double currValue = 0;
-      for ( int j = 0; j < m_eventDistribs.size(); ++J){
-        currValue += m_eventDistribs.at(j).;
-      }
 
-      double eventValue
-      values.push_back( computeEventColumn(eventValue));
+      double currValue = 0;
+      for ( int j = 0; j < m_eventDistribs.size(); ++j){
+        currValue += m_eventDistribs.at(j).eval( t_xValue, currY);
+      }
+  
+      discretePoint point( t_xValue,currY,currValue/m_eventDistribs.size());
+      values.push_back( point );
       currY += yIncrement;
     }
-
-
+    return values;
   }
 
   void Environment::drawEventDistribs(){
-    //TODO implement
+
+    for (int i = 0; i < m_eventValues.size(); ++i){
+      std::vector<discretePoint> columnValues= m_eventValues.at(i); 
+
+
+      for ( int j = 0; j < columnValues.size(); ++j){
+        discretePoint point = columnValues.at(j);
+        cv::Scalar color = getColorTemperature(
+            point.eventProbability,
+            m_colors.fadedLightBlue,
+            m_colors.darkBrown);
+        m_drawer.drawPatch(m_drawing, point.coords, color );
+      }
+    }
   };
 
   void Environment::drawCam(
@@ -91,5 +103,22 @@ namespace MultiRobot {
     cv::imshow("Environment",m_drawing);
     cv::waitKey(50);
    };
+
+
+  cv::Scalar Environment::getColorTemperature( 
+      const double t_temp,
+      const cv::Scalar &t_minColor,
+      const cv::Scalar &t_maxColor){
+    
+    double rangeGreen = t_maxColor(0) - t_minColor(0);
+    double rangeRed = t_maxColor(1) - t_minColor(1);
+    double rangeBlue = t_maxColor(2) - t_minColor(2);
+    cv::Scalar newColor  = {
+      t_minColor(0) + (rangeGreen * t_temp),
+      t_minColor(1) + (rangeRed* t_temp),
+      t_minColor(2) + (rangeBlue* t_temp)};
+    return newColor;
+  }
+
 
 }

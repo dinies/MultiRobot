@@ -19,6 +19,20 @@ namespace MultiRobot {
     cv::Scalar darkBrown;
   }colors;
 
+  typedef struct discretePoint_tag{
+    cv::Point2d coords;
+    double eventProbability;
+    discretePoint_tag(
+        double t_xCoord = 0,
+        double t_yCoord = 0,
+        double t_eventProb =0):
+      coords( t_xCoord, t_yCoord),
+      eventProbability( t_eventProb)
+    {}
+  }discretePoint;
+
+
+
 
   class Environment {
     private:
@@ -31,7 +45,7 @@ namespace MultiRobot {
     colors m_colors;
     int m_precisionDiscretization;
 
-    std::vector< std::vector< double>>  m_eventValues;
+    std::vector< std::vector< discretePoint>>  m_eventValues;
 
     
  
@@ -43,8 +57,8 @@ namespace MultiRobot {
         const double t_precDiscret = 20);
 
 
-    std::vector< std::vector< double>> computeEventValues();
-    std::vector< double> computeEventColumn(const double t_xValue);
+    std::vector< std::vector< discretePoint>> computeEventValues();
+    std::vector< discretePoint> computeEventColumn(const double t_xValue);
 
     void drawEventDistribs();
 
@@ -54,6 +68,13 @@ namespace MultiRobot {
         const bool t_deletingFlag);
 
     void showImg();
+
+    cv::Scalar getColorTemperature( 
+      const double t_temp,
+      const cv::Scalar &t_minColor,
+      const cv::Scalar &t_maxColor);
+
+
 
   };
 }

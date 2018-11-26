@@ -2,6 +2,7 @@ add_library( mainSources
   AgentManager.cpp
   Camera.cpp
   Environment.cpp
+  Gaussian.cpp
   utils/Drawer.cpp
   utils/MyMath.cpp
   )

@@ -16,7 +16,7 @@ namespace MultiRobot {
     public:
     Gaussian( const double t_expFactor, const Eigen::Vector2d &t_center );
 
-    Eigen::Vector2d eval( Eigen::Vector2d &t_point);
+    double eval( const double t_x, const double t_y);
 
     double computeDistrib( const double t_x, const double t_center);
   };

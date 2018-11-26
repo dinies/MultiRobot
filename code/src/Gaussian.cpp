@@ -10,13 +10,8 @@ namespace MultiRobot{
     m_center( t_center)
   {};
 
-  //TODO change the api params not a vector but two doubles and also the return will be the aggregate of the x and y values
-  Eigen::Vector2d  Gaussian::eval( Eigen::Vector2d &t_point ){
-    Eigen::Vector2d result(
-        computeDistrib( t_point(0), m_center(0)),
-        computeDistrib( t_point(1), m_center(1))
-        );
-    return result;
+  double Gaussian::eval( const double t_x, const double t_y){
+    return computeDistrib( t_x, m_center(0)) * computeDistrib( t_y, m_center(1));
   };
     
   double Gaussian::computeDistrib( const double t_x, const double t_center){

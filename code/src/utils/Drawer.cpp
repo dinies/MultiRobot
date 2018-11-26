@@ -39,19 +39,35 @@ namespace MultiRobot{
   };
 
 
-  void Drawer::drawPatch
-    (RGBImage &t_drawing,
-     const cv::Point2d &t_point,
-     const cv::Scalar &t_color){
+  void Drawer::drawPatch(
+      RGBImage &t_drawing,
+      const cv::Point2d &t_point,
+      const cv::Scalar &t_color){
 
-      cv::Point2d P_imgFrame =
-        convertFromWorldToImg(t_drawing, t_point);
+    std::vector<cv::Point2d> points_imgFrame;
+    cv::Point2d p_imgFrame =
+      convertFromWorldToImg(t_drawing, t_point);
 
-      if ( isInsideBoundaries(t_drawing, P_imgFrame )){
-        t_drawing.at<cv::Vec3b>(P_imgFrame.y,P_imgFrame.x) =
+    points_imgFrame.push_back( p_imgFrame);
+
+    cv::Point2d p_patchUp( p_imgFrame.x, p_imgFrame.y - 1);
+    cv::Point2d p_patchDown( p_imgFrame.x, p_imgFrame.y + 1);
+    cv::Point2d p_patchLeft( p_imgFrame.x -1, p_imgFrame.y );
+    cv::Point2d p_patchRight( p_imgFrame.x +1, p_imgFrame.y );
+
+    points_imgFrame.push_back( p_patchUp);
+    points_imgFrame.push_back( p_patchDown);
+    points_imgFrame.push_back( p_patchLeft);
+    points_imgFrame.push_back( p_patchRight);
+
+    for ( int i =0; i< points_imgFrame.size(); ++i){
+      cv::Point2d p = points_imgFrame.at(i);
+      if ( isInsideBoundaries(t_drawing, p)){
+        t_drawing.at<cv::Vec3b>(p.y,p.x) =
           cv::Vec3b(t_color[0],t_color[1],t_color[2]);
       }
-    };
+    }
+  };
 
   void Drawer::drawLine(
       const RGBImage &t_drawing,
@@ -110,8 +126,6 @@ namespace MultiRobot{
     cv::Point2d cornerDR( width, 0); 
     cv::Point2d cornerUR( width, heigth); 
 
-    //TODO solve the reference problem since the point won't be modified returning from the function
-    //all the calculation for the intersection points have to be made in the world coords not in the image coords.
     cv::Point2d interPoint;
 
     if ( findIntersectionBetweenSegments(
@@ -205,8 +219,8 @@ namespace MultiRobot{
 
     int heigth = t_drawing.rows;
     int width = t_drawing.cols;
-    return t_point.x >= 0 && t_point.x <= width &&
-      t_point.y >= 0 && t_point.y <= heigth;
+    return t_point.x >= 0 && t_point.x < width &&
+      t_point.y >= 0 && t_point.y < heigth;
   };
 
 }

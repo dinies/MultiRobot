@@ -12,7 +12,7 @@ namespace MultiRobot {
     m_v( t_v),
     m_alpha( t_alpha)
   {
-    m_radius = 3;
+    m_radius = 0.3;
   }
 
 
@@ -41,7 +41,7 @@ namespace MultiRobot {
 
     cv::Point2d pointCamCenter( m_p(0), m_p(1));
     const double angleLeftViewCone = theta + m_alpha;
-    const double offMapRange = 150;
+    const double offMapRange = 15.0;
 
     Eigen::Vector2d leftOffRangePoint(offMapRange, 0.0);
     MyMath::rotate2D( leftOffRangePoint, angleLeftViewCone);
