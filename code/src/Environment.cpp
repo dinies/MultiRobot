@@ -4,12 +4,14 @@
 namespace MultiRobot {
 
   Environment::Environment( Drawer &t_drawer,
-      const std::vector<Eigen::Vector2d> &t_eventDistribs,
-      const int t_x_units, const int t_y_units):
+      const std::vector<Gaussian> &t_eventDistribs,
+      const int t_x_units, const int t_y_units,
+      const double t_precDiscret):
     m_drawer( t_drawer),
     m_eventDistribs( t_eventDistribs),
     m_x_units( t_x_units),
-    m_y_units( t_y_units)
+    m_y_units( t_y_units),
+    m_precisionDiscretization( t_precDiscret)
   {
     m_drawing.create( 1250,1250 );
     m_drawing= cv::Vec3b(227, 246, 253);
@@ -25,10 +27,47 @@ namespace MultiRobot {
     m_colors.fadedLightBlue= {255,207,130};
     m_colors.lightOrange = {0,164,216};
     m_colors.darkBrown = {1,83,109};
+
+    m_eventValues = computeEventValues();    
  
   }
 
-  void drawEventDistribs(){
+  std::vector< std::vector< double>> Environment::computeEventValues(){
+    std::vector< std::vector< double>> values;    
+    const int numOfColumns = m_x_units*m_precisionDiscretization;
+    values.reserve( numOfColumns);
+    const double xIncrement = m_x_units/ m_precisionDiscretization;
+    double currX = 0;
+    for (int i = 0; i < numOfColumns ; ++i){
+      values.push_back( computeEventColumn(currX ));
+      currX += xIncrement;
+    }
+ 
+  };
+
+
+  std::vector< double> Environment::computeEventColumn( const double t_xValue){
+    std::vector< double> values;    
+    const int numOfRows = m_y_units*m_precisionDiscretization;
+    values.reserve( numOfRows);
+    const double yIncrement = m_y_units/ m_precisionDiscretization;
+    double currY = 0;
+    for (int i = 0; i < numOfRows; ++i){
+      Eigen::Vector2d currPoint( t_xValue, currY);
+      double currValue = 0;
+      for ( int j = 0; j < m_eventDistribs.size(); ++J){
+        currValue += m_eventDistribs.at(j).;
+      }
+
+      double eventValue
+      values.push_back( computeEventColumn(eventValue));
+      currY += yIncrement;
+    }
+
+
+  }
+
+  void Environment::drawEventDistribs(){
     //TODO implement
   };
 

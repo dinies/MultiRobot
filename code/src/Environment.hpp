@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <Eigen/Core>
 #include "utils/Drawer.hpp"
+#include "Gaussian.hpp"
 
 namespace MultiRobot {
 
@@ -22,18 +23,28 @@ namespace MultiRobot {
   class Environment {
     private:
     Drawer m_drawer;
-    std::vector<Eigen::Vector2d> m_eventDistribs; //TODO use a different parametrization to use gaussians
+    std::vector<Gaussian> m_eventDistribs;
 
     int m_x_units;
     int m_y_units;
     RGBImage m_drawing;
     colors m_colors;
+    int m_precisionDiscretization;
+
+    std::vector< std::vector< double>>  m_eventValues;
+
+    
  
 
     public:
     Environment( Drawer &t_drawer,
-        const std::vector<Eigen::Vector2d> &t_eventDistribs,
-        const int t_x_units = 100, const int t_y_units = 100);
+        const std::vector<Gaussian> &t_eventDistribs,
+        const int t_x_units = 10, const int t_y_units = 10,
+        const double t_precDiscret = 20);
+
+
+    std::vector< std::vector< double>> computeEventValues();
+    std::vector< double> computeEventColumn(const double t_xValue);
 
     void drawEventDistribs();
 
