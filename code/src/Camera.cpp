@@ -6,24 +6,108 @@ namespace MultiRobot {
   Camera::Camera( Environment & t_env,
       const Eigen::Vector2d &t_p,
       const Eigen::Vector2d &t_v,
-      const double t_alpha ):
+      const double t_alpha,
+      const double t_sigma,
+      const double t_R,
+      const double t_kappa,
+      const Eigen::Matrix2d t_K_v,
+      const double t_K_alpha,
+      const Eigen::Vector2d t_lowLeftEdgeVoronoi,
+      const Eigen::Vector2d t_upRightEdgeVoronoi,
+      const double t_delta_t ):
     m_env( t_env),
     m_p( t_p),
     m_v( t_v),
-    m_alpha( t_alpha)
+    m_alpha( t_alpha),
+    m_sigma( t_sigma),
+    m_R( t_R),
+    m_kappa( t_kappa),
+    m_K_v( t_K_v),
+    m_K_alpha( t_K_alpha),
+    m_lowLeftEdgeVoronoi( t_lowLeftEdgeVoronoi),
+    m_upRightEdgeVoronoi( t_upRightEdgeVoronoi),
+    m_delta_t(t_delta_t )
   {
-    m_radius = 0.3;
+    computeMassAndCentroidalPersp();
+    m_curr_t = 0;
+    m_radius = 0.15;
   }
 
 
 
-  Eigen::Vector2d Camera::generateInput(){
-    //TODO
-    return Eigen::Vector2d(0.00, 0.08);
+  bool Camera::isInsideVoronoi( 
+      const double t_xCoord, const double t_yCoord ){
+
+    return m_lowLeftEdgeVoronoi(0) <= t_xCoord &&
+      t_xCoord <= m_upRightEdgeVoronoi(0) &&
+      m_lowLeftEdgeVoronoi(1) <= t_yCoord &&
+      t_yCoord <= m_upRightEdgeVoronoi(1);
   }
 
-  void Camera::updateState(const Eigen::Vector2d & t_deltaState ){
-    m_v = m_v + t_deltaState;
+  void Camera::computeMassAndCentroidalPersp(){
+    
+    std::vector< std::vector< discretePoint>>  eventValues = m_env.getEventValues();
+    double mass = 0;
+    Eigen::Vector2d incrementalCentroidalPersp(0,0);
+
+
+    for ( int i = 0; i < eventValues.size(); ++i){
+      std::vector< discretePoint> columnValues = eventValues.at(i);
+      
+      for ( int j = 0; j < columnValues.size(); ++j){
+        discretePoint point = columnValues.at(j);
+
+        if ( isInsideVoronoi( point.coords.x, point.coords.y)){
+
+          Eigen::Vector2d  x(  point.coords.x, point.coords.y);
+          double commonTerm = exp( 
+              -(pow( (x - m_p).squaredNorm(),2)/(2*pow(m_sigma,2))))
+            *point.eventProbability;
+
+          mass+= commonTerm;
+          incrementalCentroidalPersp += (x-m_p)/(x - m_p).squaredNorm();
+
+        }
+      }
+    }
+    m_massVoronoiCell = mass;
+    m_centroidalPerspective = incrementalCentroidalPersp / mass;
+  }
+
+  double Camera::computeCentroidalAperture(){
+    return 1 - ( m_centroidalPerspective.transpose() * m_v);
+  }
+
+  double Camera::computeCentroidalAngleOfView(
+      const double t_centrAperture){
+    double sqrtTerm =
+      sqrt( pow(m_kappa - 1,2)* pow(t_centrAperture,2)
+          + 4* m_kappa* t_centrAperture );
+    return acos( 1 - 
+        ((( m_kappa -1) *t_centrAperture + sqrtTerm) / (2*m_kappa))
+        );
+  }
+
+  Eigen::Vector3d Camera::generateInput(){
+    double gamma = computeCentroidalAperture();
+    double centroidalAngleOfView = computeCentroidalAngleOfView( gamma);
+
+    Eigen::Matrix2d eye= Eigen::Matrix2d::Identity();
+    Eigen::Vector2d v_dot = m_K_v *( eye - ( m_v * m_v.transpose())) 
+      * m_centroidalPerspective;
+    
+    double alpha_dot = - m_K_alpha * ( m_alpha - centroidalAngleOfView);
+
+
+    Eigen::Vector3d  input( v_dot(0), v_dot(1), alpha_dot);
+    return input;
+  }
+
+  void Camera::updateState(const Eigen::Vector3d &t_deltaState ){
+    m_v(0)  = m_v(0) + (m_delta_t * t_deltaState(0));
+    m_v(1)  = m_v(1) + (m_delta_t * t_deltaState(1));
+    m_alpha  += m_delta_t * t_deltaState(2);
+
   }
 
   void Camera::evolve(){
@@ -31,6 +115,16 @@ namespace MultiRobot {
     updateState( generateInput() );
     draw();
   };
+
+
+  void Camera::evolveDummy(){
+
+    Eigen::Vector2d v_dot( -0.1, +0.2);
+
+    m_v = m_v + v_dot;
+    draw();
+
+  }
 
   std::vector< cv::Point2d> Camera::computePointsCameraDrawing(){
 
@@ -93,6 +187,72 @@ namespace MultiRobot {
     m_drawingPoints = computePointsCameraDrawing();
     m_env.drawCam( m_drawingPoints, m_p,false);
   }
+
+  void Camera::drawMassAndCentroidalPersp(){
+    
+    std::vector< std::vector< discretePoint>>  eventValues = m_env.getEventValues();
+    double mass = 0;
+    Eigen::Vector2d incrementalCentroidalPersp(0,0);
+
+    cv::Scalar black = { 0, 0, 0};
+    cv::Scalar milk= {227,246,253};
+    cv::Scalar lightblue= {210,139,38};
+
+
+    for ( int i = 0; i < eventValues.size(); ++i){
+      std::vector< discretePoint> columnValues = eventValues.at(i);
+      
+      for ( int j = 0; j < columnValues.size(); ++j){
+        discretePoint point = columnValues.at(j);
+
+        if ( isInsideVoronoi( point.coords.x, point.coords.y)){
+
+          Eigen::Vector2d  x( point.coords.x, point.coords.y);
+          double commonTerm = exp( 
+              -(pow( (x - m_p).squaredNorm(),2)/(2*pow(m_sigma,2))))
+            *point.eventProbability;
+
+          mass+= commonTerm;
+          incrementalCentroidalPersp += (x-m_p)/(x - m_p).squaredNorm();
+          m_env.drawMass( commonTerm , point.coords, milk, black);
+
+        }
+      }
+    }
+    m_massVoronoiCell = mass;
+    m_centroidalPerspective = incrementalCentroidalPersp / mass;
+
+    cv::Point2d start( m_p(0), m_p(1));
+    Eigen::Vector2d cPerspDir = m_p + m_centroidalPerspective;
+    cv::Point2d end( cPerspDir(0), cPerspDir(1));
+    m_env.drawCentroidalPerspective( start, end, lightblue);
+  }
+  
+  void Camera::drawVoronoi(){
+    std::vector< std::vector< discretePoint>>  eventValues = m_env.getEventValues();
+
+    cv::Scalar black = { 0, 0, 0};
+    cv::Scalar milk= {227,246,253};
+    cv::Scalar lightblue= {210,139,38};
+
+
+    for ( int i = 0; i < eventValues.size(); ++i){
+      std::vector< discretePoint> columnValues = eventValues.at(i);
+      
+      for ( int j = 0; j < columnValues.size(); ++j){
+        discretePoint point = columnValues.at(j);
+
+        if ( isInsideVoronoi( point.coords.x, point.coords.y)){
+
+         m_env.drawDot(  point.coords, black);
+
+        }
+      }
+    }
+  }
+
+
+
 
 }
 

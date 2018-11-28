@@ -60,12 +60,35 @@ namespace MultiRobot {
     std::vector< std::vector< discretePoint>> computeEventValues();
     std::vector< discretePoint> computeEventColumn(const double t_xValue);
 
+
+    void drawPointEventDistrib( const discretePoint &t_point);
+
+    void drawColumnDistribSerial(const std::vector<discretePoint> &t_columnValues);
+
     void drawEventDistribs();
 
     void drawCam(
         const std::vector< cv::Point2d> &t_points,
         const Eigen::Vector2d &t_camCenter,
         const bool t_deletingFlag);
+
+    void drawDot(
+        const cv::Point2d &t_point,
+        const cv::Scalar &t_color);
+
+
+
+    void drawMass(
+        const double t_value,
+        const cv::Point2d &t_point,
+        const cv::Scalar &t_minColor,
+        const cv::Scalar &t_maxColor);
+
+    void drawCentroidalPerspective(
+        const cv::Point2d &t_start,
+        const cv::Point2d &t_end,
+        const cv::Scalar &t_color);
+
 
     void showImg();
 
@@ -74,6 +97,10 @@ namespace MultiRobot {
       const cv::Scalar &t_minColor,
       const cv::Scalar &t_maxColor);
 
+
+    inline std::vector< std::vector< discretePoint>>  getEventValues(){
+      return m_eventValues;
+    }
 
 
   };

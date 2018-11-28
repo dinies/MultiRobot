@@ -8,14 +8,14 @@ namespace MultiRobot {
   {};
 
   void  AgentManager::cycle(){
-    for ( int i= 0; i<= 100; ++i){
+    for ( int i= 0; i<= 10; ++i){
       for( int j = 0; j<= m_cameras.size()-1; ++j){
         Camera &cam = m_cameras.at(j);
         cam.evolve();
+       // cam.evolveDummy();
         m_env.drawEventDistribs();
         m_env.showImg();
       }
-      //TODO
     };
 
   }

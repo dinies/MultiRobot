@@ -1,4 +1,4 @@
-// Created by Edoardo Ghini on 19/11/2018.
+// Created by Edoardo Ghini on 28/11/2018.
 
 #include <gtest/gtest.h>
 #include "../src/AgentManager.hpp"
@@ -35,23 +35,19 @@ namespace MultiRobot{
       0,1;
     double K_alpha = 1;
 
-    Eigen::Vector2d leftDownVoronoi( 2, 2);
-    Eigen::Vector2d upRightVoronoi( 8, 8);
+    Eigen::Vector2d leftDownVoronoi( 0, 0);
+    Eigen::Vector2d upRightVoronoi( 10, 10);
     double delta_t = 0.001;
      
     Camera cam( env, p, v,alpha, sigma, R,
         kappa, K_v, K_alpha, leftDownVoronoi,
         upRightVoronoi, delta_t);
 
-    std::vector<Camera> cams; 
-    cams.push_back(cam);
-
-    AgentManager agentMan( env, cams);
-
-    agentMan.cycle();
+    cam.drawVoronoi();
+    env.showImg();
+    cv::waitKey();
     
   }
 }
-
 
 

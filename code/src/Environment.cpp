@@ -1,5 +1,6 @@
 // Created by Dinies on 19/11/2018.
 
+
 #include "Environment.hpp"
 namespace MultiRobot {
 
@@ -46,7 +47,8 @@ namespace MultiRobot {
   };
 
 
-  std::vector< discretePoint> Environment::computeEventColumn( const double t_xValue){
+  std::vector< discretePoint> Environment::computeEventColumn(
+      const double t_xValue){
     std::vector< discretePoint> values;    
     const int numOfRows = m_y_units*m_precisionDiscretization;
     values.reserve( numOfRows);
@@ -66,21 +68,52 @@ namespace MultiRobot {
     return values;
   }
 
+  void Environment::drawPointEventDistrib( const discretePoint &t_point){
+    cv::Scalar color = getColorTemperature(
+        t_point.eventProbability,
+        m_colors.fadedLightBlue,
+        m_colors.darkBrown);
+    m_drawer.drawPatch(m_drawing, t_point.coords, color );
+  }
+
+  
+
+  void Environment::drawColumnDistribSerial(
+      const std::vector<discretePoint> &t_columnValues){
+
+    for ( int j = 0; j < t_columnValues.size(); ++j){
+        discretePoint point = t_columnValues.at(j);
+        drawPointEventDistrib( point);
+     }
+   
+  }
+
+  // MultiThreading implementation based on lib 
+  // https://github.com/deepsea-inria/pasl/tree/edu
+//  void Environment::drawColumnDistribParallel_rec(
+//     const std::vector<discretePoint> &t_columnValues,
+//     const int lo,
+//   const int hi){
+//   int n = hi - lo;
+//   if (n == 0) {
+//   } else if ( n==1){
+//     drawPointEventDistrib( t_columnValues.at(lo));
+//   }else{
+//     int mid = (int) floor( (lo + hi)/2);
+//     fork2( [&] {
+//       drawColumnDistribParallel_rec( t_columnValues, lo, mid);
+//     }, [&] {
+//       drawColumnDistribParallel_rec( t_columnValues, mid, hi);
+//     });
+//   }
+// }
+  
   void Environment::drawEventDistribs(){
 
     for (int i = 0; i < m_eventValues.size(); ++i){
       std::vector<discretePoint> columnValues= m_eventValues.at(i); 
-
-
-      for ( int j = 0; j < columnValues.size(); ++j){
-        discretePoint point = columnValues.at(j);
-        cv::Scalar color = getColorTemperature(
-            point.eventProbability,
-            m_colors.fadedLightBlue,
-            m_colors.darkBrown);
-        m_drawer.drawPatch(m_drawing, point.coords, color );
-      }
-    }
+      drawColumnDistribSerial( columnValues);
+   }
   };
 
   void Environment::drawCam(
@@ -99,9 +132,45 @@ namespace MultiRobot {
   };
 
 
+
+   void Environment::drawDot(
+       const cv::Point2d &t_point,
+       const cv::Scalar &t_color){
+
+     m_drawer.drawPatch(m_drawing,t_point , t_color );
+   }
+      
+
+   void Environment::drawMass(
+       const double t_value,
+       const cv::Point2d &t_point,
+       const cv::Scalar &t_minColor,
+       const cv::Scalar &t_maxColor){
+
+     cv::Scalar color = getColorTemperature(
+        t_value,
+        t_minColor,
+        t_maxColor);
+
+     m_drawer.drawPatch(m_drawing,t_point , color );
+
+    }
+
+   void Environment::drawCentroidalPerspective(
+       const cv::Point2d &t_start,
+       const cv::Point2d &t_end,
+       const cv::Scalar &t_color){
+
+     m_drawer.drawLine( m_drawing,t_start,t_end,t_color);
+
+   }
+
+ 
+
+
   void Environment::showImg(){
     cv::imshow("Environment",m_drawing);
-    cv::waitKey(50);
+    cv::waitKey(5);
    };
 
 
