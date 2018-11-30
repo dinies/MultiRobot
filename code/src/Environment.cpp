@@ -170,7 +170,7 @@ namespace MultiRobot {
 
   void Environment::showImg(){
     cv::imshow("Environment",m_drawing);
-    cv::waitKey(5);
+    cv::waitKey(1);
    };
 
 

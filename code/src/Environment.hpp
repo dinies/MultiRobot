@@ -23,9 +23,9 @@ namespace MultiRobot {
     cv::Point2d coords;
     double eventProbability;
     discretePoint_tag(
-        double t_xCoord = 0,
-        double t_yCoord = 0,
-        double t_eventProb =0):
+        double t_xCoord = 0.0,
+        double t_yCoord = 0.0,
+        double t_eventProb =0.0):
       coords( t_xCoord, t_yCoord),
       eventProbability( t_eventProb)
     {}

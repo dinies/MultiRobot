@@ -44,6 +44,31 @@ namespace MultiRobot {
       t_yCoord <= m_upRightEdgeVoronoi(1);
   }
 
+
+  double  Camera::computeSharedTerm(const discretePoint &t_point){
+
+       Eigen::Vector2d x( t_point.coords.x, t_point.coords.y);
+
+    double numExponent = pow( (x - m_p).norm() - m_R ,2);
+    double denExponent = (2*pow(m_sigma,2));
+    return exp( - numExponent/ denExponent ) * t_point.eventProbability;
+  }
+
+  Eigen::Vector2d Camera::computeCentroidalDirection( const discretePoint &t_point){
+
+    Eigen::Vector2d x( t_point.coords.x, t_point.coords.y);
+    Eigen::Vector2d num = x-m_p;
+    double denom = (x - m_p).norm();
+    double threshold = 0.000001;
+
+    if ( num.norm() < threshold){
+      return Eigen::Vector2d::Zero();
+    } else{
+      return num/denom;
+    }
+  }
+
+
   void Camera::computeMassAndCentroidalPersp(){
     
     std::vector< std::vector< discretePoint>>  eventValues = m_env.getEventValues();
@@ -59,14 +84,13 @@ namespace MultiRobot {
 
         if ( isInsideVoronoi( point.coords.x, point.coords.y)){
 
-          Eigen::Vector2d  x(  point.coords.x, point.coords.y);
-          double commonTerm = exp( 
-              -(pow( (x - m_p).squaredNorm(),2)/(2*pow(m_sigma,2))))
-            *point.eventProbability;
+          double sharedTerm = computeSharedTerm( point);
 
-          mass+= commonTerm;
-          incrementalCentroidalPersp += (x-m_p)/(x - m_p).squaredNorm();
+          mass+= sharedTerm;
 
+          Eigen::Vector2d centroidalDir = computeCentroidalDirection( point);
+
+          incrementalCentroidalPersp += centroidalDir * sharedTerm;
         }
       }
     }
@@ -135,7 +159,7 @@ namespace MultiRobot {
 
     cv::Point2d pointCamCenter( m_p(0), m_p(1));
     const double angleLeftViewCone = theta + m_alpha;
-    const double offMapRange = 15.0;
+   const double offMapRange = 15.0;
 
     Eigen::Vector2d leftOffRangePoint(offMapRange, 0.0);
     MyMath::rotate2D( leftOffRangePoint, angleLeftViewCone);
@@ -205,16 +229,19 @@ namespace MultiRobot {
       for ( int j = 0; j < columnValues.size(); ++j){
         discretePoint point = columnValues.at(j);
 
+        
+        if ( i == 100 && j ==100 ){
+          std::cout<< "debug";
+        }
         if ( isInsideVoronoi( point.coords.x, point.coords.y)){
 
-          Eigen::Vector2d  x( point.coords.x, point.coords.y);
-          double commonTerm = exp( 
-              -(pow( (x - m_p).squaredNorm(),2)/(2*pow(m_sigma,2))))
-            *point.eventProbability;
+          double sharedTerm = computeSharedTerm( point);
+          mass+= sharedTerm;
+          Eigen::Vector2d centroidalDir = computeCentroidalDirection( point);
+          incrementalCentroidalPersp += centroidalDir * sharedTerm;
+          m_env.drawMass( sharedTerm , point.coords, lightblue, black);
 
-          mass+= commonTerm;
-          incrementalCentroidalPersp += (x-m_p)/(x - m_p).squaredNorm();
-          m_env.drawMass( commonTerm , point.coords, milk, black);
+      //    std::cout << "commonTerm: "<< commonTerm<< ", incrCentroidalpersp: "<< incrementalCentroidalPersp << "\n";
 
         }
       }
@@ -250,10 +277,6 @@ namespace MultiRobot {
       }
     }
   }
-
-
-
-
 }
 
 

@@ -54,11 +54,27 @@ namespace MultiRobot{
     cv::Point2d p_patchDown( p_imgFrame.x, p_imgFrame.y + 1);
     cv::Point2d p_patchLeft( p_imgFrame.x -1, p_imgFrame.y );
     cv::Point2d p_patchRight( p_imgFrame.x +1, p_imgFrame.y );
+    cv::Point2d p_patchLeftLeft( p_imgFrame.x -2, p_imgFrame.y );
+    cv::Point2d p_patchLeftDown( p_imgFrame.x -1, p_imgFrame.y + 1);
+    cv::Point2d p_patchDownDown( p_imgFrame.x, p_imgFrame.y +2 );
+    cv::Point2d p_patchRightDown( p_imgFrame.x +1, p_imgFrame.y -1 );
+    cv::Point2d p_patchRightRight( p_imgFrame.x +2, p_imgFrame.y );
+    cv::Point2d p_patchRightUp( p_imgFrame.x +1, p_imgFrame.y - 1);
+    cv::Point2d p_patchUpUp( p_imgFrame.x , p_imgFrame.y -2);
+    cv::Point2d p_patchLeftUp( p_imgFrame.x -1, p_imgFrame.y -1);
 
     points_imgFrame.push_back( p_patchUp);
     points_imgFrame.push_back( p_patchDown);
     points_imgFrame.push_back( p_patchLeft);
     points_imgFrame.push_back( p_patchRight);
+    points_imgFrame.push_back( p_patchLeftLeft);
+    points_imgFrame.push_back( p_patchLeftDown);
+    points_imgFrame.push_back( p_patchDownDown);
+    points_imgFrame.push_back( p_patchRightDown);
+    points_imgFrame.push_back( p_patchRightRight);
+    points_imgFrame.push_back( p_patchRightUp);
+    points_imgFrame.push_back( p_patchUpUp);
+    points_imgFrame.push_back( p_patchLeftUp);
 
     for ( int i =0; i< points_imgFrame.size(); ++i){
       cv::Point2d p = points_imgFrame.at(i);

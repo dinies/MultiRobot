@@ -47,7 +47,14 @@ namespace MultiRobot {
 
 
 
-    bool isInsideVoronoi( const double t_xCoord, const double t_yCoord );
+    bool isInsideVoronoi(
+        const double t_xCoord,
+        const double t_yCoord );
+
+    double  computeSharedTerm(const discretePoint &t_point);
+
+    Eigen::Vector2d computeCentroidalDirection(
+        const discretePoint &t_point);
 
     double computeCentroidalAperture();
 
