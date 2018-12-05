@@ -21,11 +21,13 @@ namespace MultiRobot {
     Eigen::Vector2d m_lowLeftEdgeVoronoi;
     Eigen::Vector2d m_upRightEdgeVoronoi;
     double m_delta_t;
+    cv::Scalar m_color;
     double m_curr_t;
    double m_massVoronoiCell;
     Eigen::Vector2d m_centroidalPerspective;
     double m_radius;
     std::vector< cv::Point2d> m_drawingPoints;
+
 
     public:
 
@@ -36,15 +38,13 @@ namespace MultiRobot {
         const double t_sigma= 0.1,
         const double t_R = 3,
         const double t_kappa= 1,
-        const Eigen::Matrix2d t_K_v = Eigen::Matrix2d::Identity(),
+        const Eigen::Matrix2d &t_K_v = Eigen::Matrix2d::Identity(),
         const double t_K_alpha = 0,
-        const Eigen::Vector2d t_lowLeftEdgeVoronoi= Eigen::Vector2d::Zero(),
-        const Eigen::Vector2d t_upRightEdgeVoronoi= Eigen::Vector2d::Zero(),
-        const double t_delta_t = 0.01
+        const Eigen::Vector2d &t_lowLeftEdgeVoronoi= Eigen::Vector2d::Zero(),
+        const Eigen::Vector2d &t_upRightEdgeVoronoi= Eigen::Vector2d::Zero(),
+        const double t_delta_t = 0.01,
+        const cv::Scalar &t_color = { 0 , 255, 0}
         );
-
-
-
 
 
     bool isInsideVoronoi(

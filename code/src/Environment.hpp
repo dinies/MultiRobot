@@ -70,7 +70,7 @@ namespace MultiRobot {
     void drawCam(
         const std::vector< cv::Point2d> &t_points,
         const Eigen::Vector2d &t_camCenter,
-        const bool t_deletingFlag);
+        const cv::Scalar &t_color);
 
     void drawDot(
         const cv::Point2d &t_point,

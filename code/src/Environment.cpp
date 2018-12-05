@@ -30,7 +30,7 @@ namespace MultiRobot {
     m_colors.darkBrown = {1,83,109};
 
     m_eventValues = computeEventValues();    
- 
+
   }
 
   std::vector< std::vector< discretePoint>> Environment::computeEventValues(){
@@ -60,7 +60,7 @@ namespace MultiRobot {
       for ( int j = 0; j < m_eventDistribs.size(); ++j){
         currValue += m_eventDistribs.at(j).eval( t_xValue, currY);
       }
-  
+
       discretePoint point( t_xValue,currY,currValue/m_eventDistribs.size());
       values.push_back( point );
       currY += yIncrement;
@@ -76,109 +76,96 @@ namespace MultiRobot {
     m_drawer.drawPatch(m_drawing, t_point.coords, color );
   }
 
-  
+
 
   void Environment::drawColumnDistribSerial(
       const std::vector<discretePoint> &t_columnValues){
 
     for ( int j = 0; j < t_columnValues.size(); ++j){
-        discretePoint point = t_columnValues.at(j);
-        drawPointEventDistrib( point);
-     }
-   
+      discretePoint point = t_columnValues.at(j);
+      drawPointEventDistrib( point);
+    }
+
   }
 
   // MultiThreading implementation based on lib 
   // https://github.com/deepsea-inria/pasl/tree/edu
-//  void Environment::drawColumnDistribParallel_rec(
-//     const std::vector<discretePoint> &t_columnValues,
-//     const int lo,
-//   const int hi){
-//   int n = hi - lo;
-//   if (n == 0) {
-//   } else if ( n==1){
-//     drawPointEventDistrib( t_columnValues.at(lo));
-//   }else{
-//     int mid = (int) floor( (lo + hi)/2);
-//     fork2( [&] {
-//       drawColumnDistribParallel_rec( t_columnValues, lo, mid);
-//     }, [&] {
-//       drawColumnDistribParallel_rec( t_columnValues, mid, hi);
-//     });
-//   }
-// }
-  
+  //  void Environment::drawColumnDistribParallel_rec(
+  //     const std::vector<discretePoint> &t_columnValues,
+  //     const int lo,
+  //   const int hi){
+  //   int n = hi - lo;
+  //   if (n == 0) {
+  //   } else if ( n==1){
+  //     drawPointEventDistrib( t_columnValues.at(lo));
+  //   }else{
+  //     int mid = (int) floor( (lo + hi)/2);
+  //     fork2( [&] {
+  //       drawColumnDistribParallel_rec( t_columnValues, lo, mid);
+  //     }, [&] {
+  //       drawColumnDistribParallel_rec( t_columnValues, mid, hi);
+  //     });
+  //   }
+  // }
+
   void Environment::drawEventDistribs(){
 
     for (int i = 0; i < m_eventValues.size(); ++i){
       std::vector<discretePoint> columnValues= m_eventValues.at(i); 
       drawColumnDistribSerial( columnValues);
-   }
+    }
   };
 
   void Environment::drawCam(
       const std::vector< cv::Point2d> &t_points,
       const Eigen::Vector2d &t_camCenter,
-      const bool t_deletingFlag){
+      const cv::Scalar &t_color){
 
-    cv::Scalar color;
-    if (t_deletingFlag){
-      color= m_colors.milk;
-    }else{
-      color= m_colors.dark_red;
-    }
-
-    m_drawer.drawSegmentSeries(m_drawing, t_points, color);
+    m_drawer.drawSegmentSeries(m_drawing, t_points, t_color);
   };
 
+  void Environment::drawDot(
+      const cv::Point2d &t_point,
+      const cv::Scalar &t_color){
+
+    m_drawer.drawPatch(m_drawing,t_point , t_color );
+  }
 
 
-   void Environment::drawDot(
-       const cv::Point2d &t_point,
-       const cv::Scalar &t_color){
+  void Environment::drawMass(
+      const double t_value,
+      const cv::Point2d &t_point,
+      const cv::Scalar &t_minColor,
+      const cv::Scalar &t_maxColor){
 
-     m_drawer.drawPatch(m_drawing,t_point , t_color );
-   }
-      
-
-   void Environment::drawMass(
-       const double t_value,
-       const cv::Point2d &t_point,
-       const cv::Scalar &t_minColor,
-       const cv::Scalar &t_maxColor){
-
-     cv::Scalar color = getColorTemperature(
+    cv::Scalar color = getColorTemperature(
         t_value,
         t_minColor,
         t_maxColor);
 
-     m_drawer.drawPatch(m_drawing,t_point , color );
+    m_drawer.drawPatch(m_drawing,t_point , color );
 
-    }
+  }
 
-   void Environment::drawCentroidalPerspective(
-       const cv::Point2d &t_start,
-       const cv::Point2d &t_end,
-       const cv::Scalar &t_color){
+  void Environment::drawCentroidalPerspective(
+      const cv::Point2d &t_start,
+      const cv::Point2d &t_end,
+      const cv::Scalar &t_color){
 
-     m_drawer.drawLine( m_drawing,t_start,t_end,t_color);
-
-   }
-
- 
-
+    m_drawer.drawLine( m_drawing,t_start,t_end,t_color);
+  }
 
   void Environment::showImg(){
     cv::imshow("Environment",m_drawing);
     cv::waitKey(1);
-   };
+  };
 
 
   cv::Scalar Environment::getColorTemperature( 
       const double t_temp,
       const cv::Scalar &t_minColor,
       const cv::Scalar &t_maxColor){
-    
+
     double rangeGreen = t_maxColor(0) - t_minColor(0);
     double rangeRed = t_maxColor(1) - t_minColor(1);
     double rangeBlue = t_maxColor(2) - t_minColor(2);

@@ -14,7 +14,7 @@ namespace MultiRobot{
   TEST( OneCamTest, simple){
     Drawer drawer( 100);
 
-    Eigen::Vector2d center1(3, 7);
+    Eigen::Vector2d center1(4, 7);
     Gaussian distrib1( 1, center1);
     std::vector<Gaussian> eventDistribs; 
     eventDistribs.push_back( distrib1);
@@ -38,10 +38,11 @@ namespace MultiRobot{
     Eigen::Vector2d leftDownVoronoi( 2, 2);
     Eigen::Vector2d upRightVoronoi( 8, 8);
     double delta_t = 0.1;
+    cv::Scalar  dark_red = {20,0,255};
      
-    Camera cam( env, p, v,alpha, sigma, R,
+    Camera cam( env, p, v, alpha, sigma, R,
         kappa, K_v, K_alpha, leftDownVoronoi,
-        upRightVoronoi, delta_t);
+        upRightVoronoi, delta_t,dark_red);
 
     std::vector<Camera> cams; 
     cams.push_back(cam);

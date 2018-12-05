@@ -10,11 +10,12 @@ namespace MultiRobot {
       const double t_sigma,
       const double t_R,
       const double t_kappa,
-      const Eigen::Matrix2d t_K_v,
+      const Eigen::Matrix2d &t_K_v,
       const double t_K_alpha,
-      const Eigen::Vector2d t_lowLeftEdgeVoronoi,
-      const Eigen::Vector2d t_upRightEdgeVoronoi,
-      const double t_delta_t ):
+      const Eigen::Vector2d &t_lowLeftEdgeVoronoi,
+      const Eigen::Vector2d &t_upRightEdgeVoronoi,
+      const double t_delta_t,
+      const cv::Scalar &t_color):
     m_env( t_env),
     m_p( t_p),
     m_v( t_v),
@@ -26,7 +27,8 @@ namespace MultiRobot {
     m_K_alpha( t_K_alpha),
     m_lowLeftEdgeVoronoi( t_lowLeftEdgeVoronoi),
     m_upRightEdgeVoronoi( t_upRightEdgeVoronoi),
-    m_delta_t(t_delta_t )
+    m_delta_t(t_delta_t ),
+    m_color( t_color)
   {
     computeMassAndCentroidalPersp();
     m_curr_t = 0;
@@ -107,9 +109,12 @@ namespace MultiRobot {
     double sqrtTerm =
       sqrt( pow(m_kappa - 1,2)* pow(t_centrAperture,2)
           + 4* m_kappa* t_centrAperture );
-    return acos( 1 - 
-        ((( m_kappa -1) *t_centrAperture + sqrtTerm) / (2*m_kappa))
-        );
+    double a = (m_kappa -1) *t_centrAperture ;
+    double den = 2*m_kappa;
+    double num =  a + sqrtTerm;
+    double fration = num / den;
+    double centroidalAngleOfView = acos( 1 - fration );
+    return centroidalAngleOfView;
   }
 
   Eigen::Vector3d Camera::generateInput(){
@@ -206,10 +211,11 @@ namespace MultiRobot {
 
   void Camera::draw(){
     if ( m_drawingPoints.size() > 0){
-    m_env.drawCam( m_drawingPoints, m_p, true);
+      cv::Scalar milk= {227,246,253};
+      m_env.drawCam( m_drawingPoints, m_p,milk);
     }
     m_drawingPoints = computePointsCameraDrawing();
-    m_env.drawCam( m_drawingPoints, m_p,false);
+    m_env.drawCam( m_drawingPoints, m_p,m_color);
   }
 
   void Camera::drawMassAndCentroidalPersp(){
