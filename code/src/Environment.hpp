@@ -102,6 +102,9 @@ namespace MultiRobot {
       return m_eventValues;
     }
 
+    inline cv::Size getDrawingSize(){ return m_drawing.size(); };
+    inline RGBImage getCurrDrawing(){ return m_drawing; };
+
 
   };
 }

@@ -5,6 +5,7 @@
 #include "Environment.hpp"
 #include "Camera.hpp"
 
+
 namespace MultiRobot {
   class AgentManager{
 
@@ -16,5 +17,6 @@ namespace MultiRobot {
       AgentManager( Environment & t_env, std::vector<Camera> &t_cameras);
 
       void cycle();
+      void  cycleWithVideo( std::string t_fileName, double t_pfs);
   };
 }

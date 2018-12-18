@@ -104,7 +104,9 @@ namespace MultiRobot{
 
     AgentManager agentMan( env, cams);
 
-    agentMan.cycle();
+    double fps = 60.0;
+    std::string videopath  = "../videos/Full.avi";
+    agentMan.cycleWithVideo(videopath, fps);
     
   }
 }
