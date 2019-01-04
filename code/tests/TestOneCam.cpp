@@ -38,11 +38,14 @@ namespace MultiRobot{
     Eigen::Vector2d leftDownVoronoi( 2, 2);
     Eigen::Vector2d upRightVoronoi( 8, 8);
     double delta_t = 0.1;
-    cv::Scalar  dark_red = {20,0,255};
+
+    cv::Scalar blue = {255,204,0};
+
+
      
     Camera cam( env, p, v, alpha, sigma, R,
         kappa, K_v, K_alpha, leftDownVoronoi,
-        upRightVoronoi, delta_t,dark_red);
+        upRightVoronoi, delta_t,blue);
 
     std::vector<Camera> cams; 
     cams.push_back(cam);
@@ -51,7 +54,8 @@ namespace MultiRobot{
 
     double fps = 30.0;
     std::string videopath  = "../videos/OneCam.avi";
-    agentMan.cycleWithVideo(videopath,fps);
+    //agentMan.cycleWithVideo(videopath,fps);
+    agentMan.cycle();
     
   }
 }

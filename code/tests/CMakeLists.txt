@@ -109,4 +109,23 @@ add_test(
   COMMAND TestFullAlterned
   )
 
+add_executable(
+  TestFullMultiEvent
+  TestFullMultiEvent.cpp
+  Starter.cpp
+  )
+target_link_libraries(
+  TestFullMultiEvent
+  PUBLIC gtest_main
+  PUBLIC gmock_main
+  PUBLIC mainSources
+  PUBLIC ${OpenCV_LIBS}
+ )
+
+add_test(
+  NAME TestFullMultiEvent
+  COMMAND TestFullMultiEvent
+  )
+
+
 

@@ -14,14 +14,10 @@ namespace MultiRobot{
   TEST( OneCamTest, alterned){
     Drawer drawer( 100);
 
-    cv::Scalar white = {255,255,255};
-    cv::Scalar green = {0,255,20};
-    cv::Scalar dark_red = {20,0,255};
-    cv::Scalar milk= {227,246,253};
-    cv::Scalar lightBlue= {210,139,38};
-    cv::Scalar fadedLightBlue= {255,207,130};
-    cv::Scalar lightOrange = {0,164,216};
-    cv::Scalar darkBrown = {1,83,109};
+    cv::Scalar blue = {255,204,0};
+    cv::Scalar green= {0,204,0};
+    cv::Scalar red= {0,51,204};
+    cv::Scalar yellow= {0,204,255};
 
 
 
@@ -79,21 +75,21 @@ namespace MultiRobot{
      
     Camera camLeftDown( env, p1, v1, alpha, sigma, R,
         kappa, K_v, K_alpha, leftUpVoronoiFirstP,
-        leftUpVoronoiSecondP, delta_t,green);
+        leftUpVoronoiSecondP, delta_t,red);
 
     Camera camRightDown( env, p2, v2, alpha, sigma, R,
         kappa, K_v, K_alpha, leftDownVoronoiFirstP,
-        leftDownVoronoiSecondP, delta_t, lightOrange);
+        leftDownVoronoiSecondP, delta_t, blue);
 
 
     Camera camRightUp( env, p3, v3, alpha, sigma, R,
         kappa, K_v, K_alpha, rightDownVoronoiFirstP,
-        rightDownVoronoiSecondP, delta_t, lightBlue);
+        rightDownVoronoiSecondP, delta_t, green);
 
 
     Camera camLeftUp( env, p4, v4, alpha, sigma, R,
         kappa, K_v, K_alpha,rightUpVoronoiFirstP,
-        rightUpVoronoiSecondP, delta_t,darkBrown);
+        rightUpVoronoiSecondP, delta_t,yellow);
 
 
     std::vector<Camera> cams; 
@@ -106,8 +102,8 @@ namespace MultiRobot{
 
     double fps = 60.0;
     std::string videopath  = "../videos/FullAlterned.avi";
-    agentMan.cycleWithVideo(videopath, fps);
-    
+    //agentMan.cycleWithVideo(videopath, fps);
+    agentMan.cycle();
   }
 }
 

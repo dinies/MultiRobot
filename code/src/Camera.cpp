@@ -211,8 +211,8 @@ namespace MultiRobot {
 
   void Camera::draw(){
     if ( m_drawingPoints.size() > 0){
-      cv::Scalar milk= {227,246,253};
-      m_env.drawCam( m_drawingPoints, m_p,milk);
+      cv::Scalar white= {255,255,255};
+      m_env.drawCam( m_drawingPoints, m_p,white);
     }
     m_drawingPoints = computePointsCameraDrawing();
     m_env.drawCam( m_drawingPoints, m_p,m_color);
@@ -225,10 +225,8 @@ namespace MultiRobot {
     Eigen::Vector2d incrementalCentroidalPersp(0,0);
 
     cv::Scalar black = { 0, 0, 0};
-    cv::Scalar milk= {227,246,253};
-    cv::Scalar lightblue= {210,139,38};
-
-
+    cv::Scalar lightblue= { 0, 204,255};
+  
     for ( int i = 0; i < eventValues.size(); ++i){
       std::vector< discretePoint> columnValues = eventValues.at(i);
       
@@ -265,9 +263,7 @@ namespace MultiRobot {
     std::vector< std::vector< discretePoint>>  eventValues = m_env.getEventValues();
 
     cv::Scalar black = { 0, 0, 0};
-    cv::Scalar milk= {227,246,253};
-    cv::Scalar lightblue= {210,139,38};
-
+    cv::Scalar lightblue= { 0, 204,255};
 
     for ( int i = 0; i < eventValues.size(); ++i){
       std::vector< discretePoint> columnValues = eventValues.at(i);

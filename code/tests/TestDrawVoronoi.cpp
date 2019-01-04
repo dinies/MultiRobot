@@ -39,9 +39,10 @@ namespace MultiRobot{
     Eigen::Vector2d upRightVoronoi( 10, 10);
     double delta_t = 0.001;
      
+    cv::Scalar blue = {255,204,0};
     Camera cam( env, p, v,alpha, sigma, R,
         kappa, K_v, K_alpha, leftDownVoronoi,
-        upRightVoronoi, delta_t);
+        upRightVoronoi, delta_t, blue);
 
     cam.drawVoronoi();
     env.showImg();

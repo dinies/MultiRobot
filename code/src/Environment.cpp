@@ -15,7 +15,8 @@ namespace MultiRobot {
     m_precisionDiscretization( t_precDiscret)
   {
     m_drawing.create( 1000,1000 );
-    m_drawing= cv::Vec3b(227, 246, 253);
+    //m_drawing= cv::Vec3b(227, 246, 253);
+    m_drawing= cv::Vec3b(255, 255, 255);
     cv::namedWindow("Environment");
     cv::moveWindow("Environment", 40, 40);
 
@@ -28,6 +29,7 @@ namespace MultiRobot {
     m_colors.fadedLightBlue= {255,207,130};
     m_colors.lightOrange = {0,164,216};
     m_colors.darkBrown = {1,83,109};
+    m_colors.black = { 0 , 0 , 0};
 
     m_eventValues = computeEventValues();    
 
@@ -71,8 +73,8 @@ namespace MultiRobot {
   void Environment::drawPointEventDistrib( const discretePoint &t_point){
     cv::Scalar color = getColorTemperature(
         t_point.eventProbability,
-        m_colors.fadedLightBlue,
-        m_colors.darkBrown);
+        m_colors.white,
+        m_colors.black);
     m_drawer.drawPatch(m_drawing, t_point.coords, color );
   }
 

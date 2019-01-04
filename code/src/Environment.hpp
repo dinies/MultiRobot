@@ -17,6 +17,7 @@ namespace MultiRobot {
     cv::Scalar fadedLightBlue;
     cv::Scalar lightOrange;
     cv::Scalar darkBrown;
+    cv::Scalar black;
   }colors;
 
   typedef struct discretePoint_tag{
